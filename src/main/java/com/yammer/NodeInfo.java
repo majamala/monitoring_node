@@ -3,7 +3,7 @@ package com.yammer;
 import javax.validation.constraints.NotNull;
 import java.net.InetAddress;
 
-public class NodeRegister {
+public class NodeInfo {
 
     @NotNull
     private String name;
@@ -14,15 +14,15 @@ public class NodeRegister {
     private String connectors;
     private String meta;
 
-    public NodeRegister(){
+    public NodeInfo(){
 
     }
 
-    public NodeRegister(String IPAddress) {
+    public NodeInfo(String IPAddress) {
         this.IPAdress = IPAddress;
     }
 
-    public NodeRegister(String name, String location, String IPAdress, String description, String connectors, String meta) {
+    public NodeInfo(String name, String location, String IPAdress, String description, String connectors, String meta) {
         this.name=name;
         this.location=location;
         this.IPAdress = IPAdress;
@@ -33,7 +33,7 @@ public class NodeRegister {
 
     @Override
     public String toString() {
-        return "NodeRegister{" +
+        return "NodeInfo{" +
                 "name=" + name +
                 ", location='" + location + '\'' +
                 ", IPAdress='" + IPAdress + '\'' +

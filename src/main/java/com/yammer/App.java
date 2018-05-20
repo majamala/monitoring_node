@@ -12,15 +12,11 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.prefs.Preferences;
 
 
 public class App extends Application<Configuration> {
@@ -32,13 +28,11 @@ public class App extends Application<Configuration> {
     }
 
     @Override
-    public void run(Configuration c, Environment e) throws Exception {
+    public void run(Configuration c, Environment e) {
         LOGGER.info("Registering REST resources");
-        final Client client = new JerseyClientBuilder(e).build("DemoRESTClient");
-        e.jersey().register(new SensorRESTController(e.getValidator(), client));
-
-        e.jersey().register(new RESTClientController(client));
-    }
+        final Client client = new JerseyClientBuilder(e).build("NodeRestClient");
+        e.jersey().register(new NodeRestController(e.getValidator(), client));
+        }
 
     public static void main(String[] args) throws Exception {
         try {

@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class Sensor {
+public class SensorReading {
 
     @NotNull
     private int id;
@@ -17,10 +17,10 @@ public class Sensor {
     @NotBlank
     private String unit;
 
-    public Sensor() {
+    public SensorReading() {
     }
 
-    public Sensor(int id, String name, String date, int value, String unit) {
+    public SensorReading(int id, String name, String date, int value, String unit) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -70,7 +70,7 @@ public class Sensor {
 
     @Override
     public String toString() {
-        return "Sensor [id=" + id + ", name=" + name + ", date="
+        return "SensorReading [id=" + id + ", name=" + name + ", date="
                 + date + ", value=" + value + ", unit=" + unit + "]";
     }
 }

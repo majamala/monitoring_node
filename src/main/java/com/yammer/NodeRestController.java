@@ -1,22 +1,13 @@
 package com.yammer;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.google.gson.Gson;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -24,20 +15,20 @@ import javax.ws.rs.core.Response.Status;
 
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
-public class SensorRESTController {
+public class NodeRestController {
 
     private final Validator validator;
     private Client client;
 
 
-    public SensorRESTController(Validator validator, Client client) {
+    public NodeRestController(Validator validator, Client client) {
         this.validator = validator;
         this.client = client;
         Config cfg = new Config();
 
-        NodeRegister nodeRegister = new NodeRegister(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
+        NodeInfo nodeInfo = new NodeInfo(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
         /*   WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
-         Response response = webTarget.request().post(Entity.json(nodeRegister));
+         Response response = webTarget.request().post(Entity.json(nodeInfo));
         */
     }
 
@@ -57,9 +48,9 @@ public class SensorRESTController {
         if (startDate.isEmpty()) {
             return Response.ok(SensorDB.getSensorTemp()).build();
         } else {
-            List<Sensor> sensors = SensorDB.getSensorTempByDate(startDate,endDate);
-            if (sensors.size() != 0)
-                return Response.ok(sensors).build();
+            List<SensorReading> sensorReadings = SensorDB.getSensorTempByDate(startDate,endDate);
+            if (sensorReadings.size() != 0)
+                return Response.ok(sensorReadings).build();
             else
                 return Response.status(Status.NOT_FOUND).build();
         }
@@ -70,12 +61,12 @@ public class SensorRESTController {
     public Response getSensors(String body) {
 
         Gson gson = new Gson();
-        Sensor sensor = gson.fromJson(body, Sensor.class);
+        SensorInfo sensorInfo = gson.fromJson(body, SensorInfo.class);
 
-        if (SensorDB.getSensors().contains(sensor)) {
+        if (SensorDB.getSensors().contains(sensorInfo)) {
             return Response.status(Status.CONFLICT).build();
         } else {
-            return Response.ok(sensor).build();
+            return Response.ok(sensorInfo).build();
         }
     }
 
@@ -83,7 +74,7 @@ public class SensorRESTController {
     @GET
     @Path("/{id}")
     public Response getSensorById(@PathParam("id") Integer id) {
-        Sensor sensor = SensorDB.getSensorById(id);
+        SensorReading sensor = SensorDB.getSensorById(id);
         if (sensor != null)
             return Response.ok(sensor).build();
         else
@@ -94,7 +85,7 @@ public class SensorRESTController {
     @GET
     @Path("/{name}")
     public Response getSensorByName(@PathParam("name") String name) {
-        Sensor sensor = SensorDB.getSensorByName(name);
+        SensorReading sensor = SensorDB.getSensorByName(name);
         if (sensor != null)
             return Response.ok(sensor).build();
         else
@@ -103,20 +94,20 @@ public class SensorRESTController {
 
 
     @POST
-    public Response createSensor(Sensor sensor) throws URISyntaxException {
+    public Response createSensor(SensorReading sensor) throws URISyntaxException {
         // validation
-        Set<ConstraintViolation<Sensor>> violations = validator.validate(sensor);
-        Sensor e = SensorDB.getSensorById(sensor.getId());
+        Set<ConstraintViolation<SensorReading>> violations = validator.validate(sensor);
+        SensorReading e = SensorDB.getSensorById(sensor.getId());
         if (violations.size() > 0) {
             ArrayList<String> validationMessages = new ArrayList<String>();
-            for (ConstraintViolation<Sensor> violation : violations) {
+            for (ConstraintViolation<SensorReading> violation : violations) {
                 validationMessages.add(violation.getPropertyPath().toString() + ": " + violation.getMessage());
             }
             return Response.status(Status.BAD_REQUEST).entity(validationMessages).build();
         }
         if (e != null) {
             SensorDB.updateSensor(sensor.getId(), sensor);
-            return Response.created(new URI("/sensors/" + sensor.getId()))
+            return Response.created(new URI("/sensorReadings/" + sensor.getId()))
                     .build();
         } else
             return Response.status(Status.NOT_FOUND).build();
@@ -124,13 +115,13 @@ public class SensorRESTController {
 
     @PUT
     @Path("/{id}")
-    public Response updateSensorById(@PathParam("id") Integer id, Sensor sensor) {
+    public Response updateSensorById(@PathParam("id") Integer id, SensorReading sensor) {
         // validation
-        Set<ConstraintViolation<Sensor>> violations = validator.validate(sensor);
-        Sensor e = SensorDB.getSensorById(sensor.getId());
+        Set<ConstraintViolation<SensorReading>> violations = validator.validate(sensor);
+        SensorReading e = SensorDB.getSensorById(sensor.getId());
         if (violations.size() > 0) {
             ArrayList<String> validationMessages = new ArrayList<String>();
-            for (ConstraintViolation<Sensor> violation : violations) {
+            for (ConstraintViolation<SensorReading> violation : violations) {
                 validationMessages.add(violation.getPropertyPath().toString() + ": " + violation.getMessage());
             }
             return Response.status(Status.BAD_REQUEST).entity(validationMessages).build();
@@ -146,7 +137,7 @@ public class SensorRESTController {
     @DELETE
     @Path("/{id}")
     public Response removeSensorById(@PathParam("id") Integer id) {
-        Sensor sensor = SensorDB.getSensorById(id);
+        SensorReading sensor = SensorDB.getSensorById(id);
         if (sensor != null) {
             SensorDB.removeSensor(id);
             return Response.ok().build();
