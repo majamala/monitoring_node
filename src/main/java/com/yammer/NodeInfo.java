@@ -1,7 +1,6 @@
 package com.yammer;
 
 import javax.validation.constraints.NotNull;
-import java.net.InetAddress;
 
 public class NodeInfo {
 

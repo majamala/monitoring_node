@@ -32,23 +32,17 @@ public class NodeRestController {
         */
     }
 
-    @GET
-    @Path("/co2")
-    public Response getSensorsCo2() {
-        return Response.ok(SensorDB.getSensorCO2()).build();
-        //return Response.ok(App.sensorReadings_co2).build();
-
-    }
 
     @GET
-    @Path("/temp")
-    public Response getSensorById(@DefaultValue("") @QueryParam("startDate") String startDate,
+    @Path("/sensorReadings/{sensorName}")
+    public Response getSensorReadings(@PathParam("sensorName") String sensorName,
+                                  @DefaultValue("") @QueryParam("startDate") String startDate,
                                   @DefaultValue("") @QueryParam("endDate") String endDate) throws ParseException {
 
         if (startDate.isEmpty()) {
-            return Response.ok(SensorDB.getSensorTemp()).build();
+            return Response.ok(SensorDB.getSensorReadings(sensorName)).build();
         } else {
-            List<SensorReading> sensorReadings = SensorDB.getSensorTempByDate(startDate,endDate);
+            List<SensorReading> sensorReadings = SensorDB.getSensorReadingsByDate(sensorName, startDate,endDate);
             if (sensorReadings.size() != 0)
                 return Response.ok(sensorReadings).build();
             else
@@ -66,9 +60,29 @@ public class NodeRestController {
         if (SensorDB.getSensors().contains(sensorInfo)) {
             return Response.status(Status.CONFLICT).build();
         } else {
+            SensorDB.addSensor(sensorInfo);
             return Response.ok(sensorInfo).build();
         }
     }
+
+    @GET
+    @Path("/sensors")
+    public Response getSensors() {
+        return Response.ok(SensorDB.getSensors()).build();
+    }
+
+    @POST
+    @Path("/sensorReadings/{sensorName}")
+    public Response postSensorReading(@PathParam("sensorName") String sensorName, String body) {
+
+        Gson gson = new Gson();
+        SensorReading sensorReading = gson.fromJson(body, SensorReading.class);
+
+        SensorDB.addSensorReading(sensorReading);
+        return Response.ok(sensorReading).build();
+    }
+
+
 
 /**
     @GET

@@ -7,6 +7,8 @@ public class SensorInfo {
     private String ipAddr;
     private String port;
     private String description;
+    private String unit;
+    private String meta;
 
     public String getDescription() {
         return description;
@@ -15,9 +17,6 @@ public class SensorInfo {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    private String unit;
-    private String meta;
 
     public String getLocation() {
         return location;

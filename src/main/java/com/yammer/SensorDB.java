@@ -12,13 +12,9 @@ public class SensorDB {
     public static HashMap<Integer, SensorReading> sensorCO2 = new HashMap<>();
 
     public static List<SensorInfo> sensors = new ArrayList<>();
-/**
-    static {
-        sensorReadings.put(1, new SensorReading(1, "sensor_temp", "4/18/18 8:14 PM", 22, "°C"));
-        sensorReadings.put(2, new SensorReading(2, "sensor_temp", "4/19/18 3:14 PM", 18, "°C"));
-        sensorReadings.put(3, new SensorReading(3, "sensor_temp", "4/20/18 10:14 AM", 15, "°C"));
-    }
-**/
+
+    public static List<SensorReading> sensorReadings = new ArrayList<>();
+
 
 public static void runTempSensor () throws InterruptedException{
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -34,8 +30,6 @@ public static void runTempSensor () throws InterruptedException{
         int randomValue = r.nextInt((rangeMax - rangeMin) + 1) + rangeMin;
 
         sensorTemp.put(id, new SensorReading(id, "temp_sensor", dtf.format(now).toString(), randomValue, "°C"));
-        //Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        //System.out.println(timestamp);
 
         Thread.sleep(5000);
     }
@@ -69,7 +63,7 @@ public static void runTempSensor () throws InterruptedException{
         return new ArrayList<SensorReading>(sensorCO2.values());
     }
 
-    public static List<SensorReading> getSensorTempByDate(String startDate, String endDate) throws ParseException {
+    public static List<SensorReading> getSensorReadingsByDate(String sensorName, String startDate, String endDate) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         Date dateDate = format.parse(startDate);
@@ -83,7 +77,7 @@ public static void runTempSensor () throws InterruptedException{
         }
         List<SensorReading> sensorReadingList = new ArrayList<>();
 
-        for(SensorReading s: getSensorTemp()) {
+        for(SensorReading s: getSensorReadings(sensorName)) {
             format = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
             Date readingDate = format.parse(s.getDate());
             long miliReadingDate = readingDate.getTime();
@@ -95,8 +89,30 @@ public static void runTempSensor () throws InterruptedException{
     return sensorReadingList;
     }
 
+    public static void addSensor(SensorInfo sensorInfo) {
+    sensors.add(sensorInfo);
+    }
+
     public static List<SensorInfo> getSensors() {
     return sensors;
+    }
+
+    public static void addSensorReading(SensorReading sensorReading) {
+        sensorReadings.add(sensorReading);
+    }
+
+    public static List<SensorReading> getSensorReadings(String sensorName) {
+    if (sensorName != null) {
+        return sensorReadings;
+    } else {
+        List<SensorReading> sensorReadingsByName = new ArrayList<>();
+        for (SensorReading sr : sensorReadings) {
+            if (sensorName.equals(sr.getName())) {
+                sensorReadingsByName.add(sr);
+            }
+        }
+        return sensorReadingsByName;
+    }
     }
 /**
     public static SensorReading getSensorByName(String name) {
