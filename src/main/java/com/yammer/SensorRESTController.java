@@ -1,5 +1,8 @@
 package com.yammer;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.google.gson.Gson;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
@@ -11,19 +14,31 @@ import java.util.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.ws.rs.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 
-@Path("/sensors")
+@Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 public class SensorRESTController {
 
     private final Validator validator;
+    private Client client;
 
-    public SensorRESTController(Validator validator) {
+
+    public SensorRESTController(Validator validator, Client client) {
         this.validator = validator;
+        this.client = client;
+        Config cfg = new Config();
+
+        NodeRegister nodeRegister = new NodeRegister(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
+        /*   WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
+         Response response = webTarget.request().post(Entity.json(nodeRegister));
+        */
     }
 
     @GET
@@ -47,6 +62,20 @@ public class SensorRESTController {
                 return Response.ok(sensors).build();
             else
                 return Response.status(Status.NOT_FOUND).build();
+        }
+    }
+
+    @POST
+    @Path("/sensors")
+    public Response getSensors(String body) {
+
+        Gson gson = new Gson();
+        Sensor sensor = gson.fromJson(body, Sensor.class);
+
+        if (SensorDB.getSensors().contains(sensor)) {
+            return Response.status(Status.CONFLICT).build();
+        } else {
+            return Response.ok(sensor).build();
         }
     }
 

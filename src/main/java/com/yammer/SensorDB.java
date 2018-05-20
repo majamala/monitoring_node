@@ -12,6 +12,7 @@ public class SensorDB {
     public static HashMap<Integer, Sensor> sensorTemp = new HashMap<>();
     public static HashMap<Integer, Sensor> sensorCO2 = new HashMap<>();
 
+    public static List<Sensor> sensors = new ArrayList<>();
 /**
     static {
         sensors.put(1, new Sensor(1, "sensor_temp", "4/18/18 8:14 PM", 22, "°C"));
@@ -93,6 +94,10 @@ public static void runTempSensor () throws InterruptedException{
             }
         }
     return sensorList;
+    }
+
+    public static List<Sensor> getSensors() {
+    return sensors;
     }
 /**
     public static Sensor getSensorByName(String name) {

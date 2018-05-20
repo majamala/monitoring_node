@@ -28,19 +28,6 @@ public class RESTClientController
     }
 
     @GET
-    @Path("/employees/")
-    public String getEmployees()
-    {
-        //Do not hard code in your application
-        WebTarget webTarget = client.target("http://10.19.128.213:8080/employees");
-        Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
-        Response response = invocationBuilder.get();
-        @SuppressWarnings("rawtypes")
-        ArrayList employees = response.readEntity(ArrayList.class);
-        return employees.toString();
-    }
-
-    @GET
     @Path("/employees/{id}")
     public String getEmployeeById(@PathParam("id") int id)
     {
