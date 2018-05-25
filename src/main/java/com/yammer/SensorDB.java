@@ -16,26 +16,6 @@ public class SensorDB {
     public static List<SensorReading> sensorReadings = new ArrayList<>();
 
 
-    public static void runCO2Sensor () throws InterruptedException {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        Random r = new Random();
-        int rangeMin = 0;
-        int rangeMax = 9;
-        int id = 0;
-
-        while(true) {
-
-            id++;
-            LocalDateTime now = LocalDateTime.now();
-            int randomValue = r.nextInt((rangeMax - rangeMin) + 1) + rangeMin;
-
-            sensorCO2.put(id, new SensorReading(id, "co2_sensor", dtf.format(now).toString(), randomValue, "°C"));
-
-            Thread.sleep(7000);
-        }
-
-    }
-
     public static List<SensorReading> getSensorTemp() {
         return new ArrayList<SensorReading>(sensorTemp.values());
     }
