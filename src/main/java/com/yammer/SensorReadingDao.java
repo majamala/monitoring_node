@@ -11,6 +11,6 @@ public interface SensorReadingDao {
     @SqlQuery("select * from sensorreadings;")
     public List<SensorReading> getSensorReadings();
 
-    @SqlQuery ("")
+    //@SqlQuery ("")
 
 }

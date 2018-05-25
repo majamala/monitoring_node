@@ -6,14 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="dropwizard-demo" />
-        <module name="dropwizard-demo (1)" />
+        <module name="monitoring_node" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="dropwizard-demo" target="1.8" />
       <module name="dropwizard-demo (1)" target="1.8" />
       <module name="dropwizard-demo (2)" target="1.8" />
+      <module name="monitoring_node" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
