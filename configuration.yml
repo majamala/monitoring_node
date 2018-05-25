@@ -1,8 +1,8 @@
 database:
-  driverClass: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost/node
-  user: majam
-  password: majam
+  driverClass: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/test?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+  user: root
+  password: password
   maxWaitForConnection: 1s
   validationQuery: "SELECT 1"
   validationQueryTimeout: 3s

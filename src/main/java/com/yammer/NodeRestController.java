@@ -1,10 +1,8 @@
 package com.yammer;
 
 import com.google.gson.Gson;
-
 import java.text.ParseException;
 import java.util.*;
-
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -17,11 +15,12 @@ import javax.ws.rs.core.Response.Status;
 @Produces(MediaType.APPLICATION_JSON)
 public class NodeRestController {
 
-    private final Validator validator;
+    private Validator validator;
     private Client client;
+    private SensorReadingsService sensorReadingService;
 
 
-    public NodeRestController(Validator validator, Client client) {
+    public NodeRestController(Validator validator, Client client, SensorReadingsService sensorReadingsService) {
         this.validator = validator;
         this.client = client;
         Config cfg = new Config();
@@ -30,6 +29,12 @@ public class NodeRestController {
         /*   WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
          Response response = webTarget.request().post(Entity.json(nodeInfo));
         */
+
+        this.sensorReadingService=sensorReadingsService;
+    }
+
+    public NodeRestController(SensorReadingsService sensorReadingsService) {
+        this.sensorReadingService=sensorReadingsService;
     }
 
 
@@ -82,6 +87,10 @@ public class NodeRestController {
         return Response.ok(sensorReading).build();
     }
 
+    @GET
+    public Representation <List<SensorReading>> getSensorReadings() {
+        return new Representation<List<SensorReading>>(sensorReadingService.getSensorReadings());
+    }
 
 
 /**
