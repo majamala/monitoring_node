@@ -1,6 +1,10 @@
 package com.yammer;
 
 import com.google.gson.Gson;
+import org.glassfish.jersey.client.ClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.ParseException;
 import java.util.*;
 import javax.validation.Validator;
@@ -18,6 +22,8 @@ public class NodeRestController {
     private Validator validator;
     private Client client;
     private SensorReadingsService sensorReadingService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+
 
 
     public NodeRestController(Validator validator, Client client, SensorReadingsService sensorReadingsService) {
@@ -30,10 +36,6 @@ public class NodeRestController {
          Response response = webTarget.request().post(Entity.json(nodeInfo));
         */
 
-        this.sensorReadingService=sensorReadingsService;
-    }
-
-    public NodeRestController(SensorReadingsService sensorReadingsService) {
         this.sensorReadingService=sensorReadingsService;
     }
 
@@ -82,8 +84,7 @@ public class NodeRestController {
 
         Gson gson = new Gson();
         SensorReading sensorReading = gson.fromJson(body, SensorReading.class);
-
-        SensorDB.addSensorReading(sensorReading);
+        sensorReadingService.insert(sensorReading.getId(), sensorReading.getName(), sensorReading.getDate(), sensorReading.getValue(), sensorReading.getUnit());
         return Response.ok(sensorReading).build();
     }
 
