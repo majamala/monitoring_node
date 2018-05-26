@@ -12,6 +12,7 @@ public class Representation <T> {
     private T data;
 
      public Representation(long code, T data) {
+         this.code=code;
          this.data=data;
      }
 

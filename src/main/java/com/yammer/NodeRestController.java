@@ -2,10 +2,6 @@ package com.yammer;
 
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
-import org.glassfish.jersey.client.ClientProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.ParseException;
 import java.util.*;
 import javax.validation.Validator;
@@ -23,8 +19,6 @@ public class NodeRestController {
     private Validator validator;
     private Client client;
     private SensorReadingsService sensorReadingService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-
 
 
     public NodeRestController(Validator validator, Client client, SensorReadingsService sensorReadingsService) {

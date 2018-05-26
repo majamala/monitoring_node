@@ -2,26 +2,16 @@ package com.yammer;
 
 import com.codahale.metrics.health.HealthCheck;
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIHealthCheck;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
-
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class App extends Application<NodeConfiguration> {
