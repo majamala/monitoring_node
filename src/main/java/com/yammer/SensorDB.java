@@ -8,21 +8,11 @@ import java.util.*;
 
 public class SensorDB {
 
-    public static HashMap<Integer, SensorReading> sensorTemp = new HashMap<>();
-    public static HashMap<Integer, SensorReading> sensorCO2 = new HashMap<>();
 
     public static List<SensorInfo> sensors = new ArrayList<>();
 
     public static List<SensorReading> sensorReadings = new ArrayList<>();
 
-
-    public static List<SensorReading> getSensorTemp() {
-        return new ArrayList<SensorReading>(sensorTemp.values());
-    }
-
-    public static List<SensorReading> getSensorCO2() {
-        return new ArrayList<SensorReading>(sensorCO2.values());
-    }
 
     public static List<SensorReading> getSensorReadingsByDate(String sensorName, String startDate, String endDate) throws ParseException {
 

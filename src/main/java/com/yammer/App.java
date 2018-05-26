@@ -48,8 +48,6 @@ public class App extends Application<NodeConfiguration> {
         HealthCheck appHealthCheck = new DBIHealthCheck(dbi, "SELECT 1");
         e.healthChecks().register("db", appHealthCheck);
 
-        // Register resources
-        //e.jersey().register(new NodeRestController(dbi.onDemand(SensorReadingsService.class)));
     }
 
     public static void main(String[] args) throws Exception {
@@ -61,31 +59,6 @@ public class App extends Application<NodeConfiguration> {
 
         new App().run(args);
 
-
-
-        Callable<Void> callable2 = new Callable<Void>()
-        {
-            @Override
-            public Void call() throws Exception
-            {
-                SensorDB.runCO2Sensor();
-                return null;
-            }
-        };
-
-        List<Callable<Void>> taskList = new ArrayList<Callable<Void>>();
-        taskList.add(callable2);
-
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-
-        try
-        {
-            executor.invokeAll(taskList);
-        }
-        catch (InterruptedException ie)
-        {
-
-        }
 
     }
 

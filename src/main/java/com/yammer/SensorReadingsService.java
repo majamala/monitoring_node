@@ -5,7 +5,7 @@ import org.skife.jdbi.v2.exceptions.UnableToObtainConnectionException;
 import org.skife.jdbi.v2.sqlobject.CreateSqlObject;
 
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public abstract  class SensorReadingsService {
     private static final String PART_NOT_FOUND = "Part id %s not found.";
@@ -21,8 +21,8 @@ public abstract  class SensorReadingsService {
     @CreateSqlObject
     abstract SensorReadingDao sensorReadingDao();
 
-    public List<SensorReading> getSensorReadings() {
-        return sensorReadingDao().getSensorReadings();
+    public List<SensorReading> getSensorReadings(String sensorName) {
+        return sensorReadingDao().getSensorReadings(sensorName);
     }
 
     void insert(int id, String name, String date, int value, String unit) {
@@ -31,7 +31,7 @@ public abstract  class SensorReadingsService {
 
     public String performHealthCheck() {
         try {
-            sensorReadingDao().getSensorReadings();
+            //sensorReadingDao().getSensorReadings();
         } catch (UnableToObtainConnectionException ex) {
             return checkUnableToObtainConnectionException(ex);
         } catch (UnableToExecuteStatementException ex) {

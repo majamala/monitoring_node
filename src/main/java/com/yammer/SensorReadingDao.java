@@ -10,8 +10,8 @@ import java.util.List;
 @RegisterMapper(SensorReadingsMapper.class)
 public interface SensorReadingDao {
 
-    @SqlQuery("select * from sensorreadings;")
-    public List<SensorReading> getSensorReadings();
+    @SqlQuery("select * from sensorreadings where name = :sensorName")
+    public List<SensorReading> getSensorReadings(@Bind("sensorName") String sensorName);
 
     @SqlUpdate("insert into sensorreadings (id, name, date, value, unit) values (:id, :name, :date, :value, :unit)")
     void insert(@Bind("id") int id, @Bind("name") String name, @Bind("date") String date, @Bind("value") int value, @Bind("unit") String unit);

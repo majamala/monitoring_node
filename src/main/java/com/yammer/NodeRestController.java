@@ -1,6 +1,7 @@
 package com.yammer;
 
 import com.google.gson.Gson;
+import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.client.ClientProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,18 +43,18 @@ public class NodeRestController {
 
     @GET
     @Path("/sensorReadings/{sensorName}")
-    public Response getSensorReadings(@PathParam("sensorName") String sensorName,
+    public Representation <List<SensorReading>> getSensorReadings(@PathParam("sensorName") String sensorName,
                                   @DefaultValue("") @QueryParam("startDate") String startDate,
                                   @DefaultValue("") @QueryParam("endDate") String endDate) throws ParseException {
 
         if (startDate.isEmpty()) {
-            return Response.ok(SensorDB.getSensorReadings(sensorName)).build();
+            return new Representation<List<SensorReading>>(HttpStatus.OK_200, sensorReadingService.getSensorReadings(sensorName));
         } else {
             List<SensorReading> sensorReadings = SensorDB.getSensorReadingsByDate(sensorName, startDate,endDate);
             if (sensorReadings.size() != 0)
-                return Response.ok(sensorReadings).build();
+                return new Representation<List<SensorReading>>(HttpStatus.OK_200, sensorReadings);
             else
-                return Response.status(Status.NOT_FOUND).build();
+                return new Representation<List<SensorReading>>(HttpStatus.NOT_FOUND_404, null);
         }
     }
 
@@ -86,11 +87,6 @@ public class NodeRestController {
         SensorReading sensorReading = gson.fromJson(body, SensorReading.class);
         sensorReadingService.insert(sensorReading.getId(), sensorReading.getName(), sensorReading.getDate(), sensorReading.getValue(), sensorReading.getUnit());
         return Response.ok(sensorReading).build();
-    }
-
-    @GET
-    public Representation <List<SensorReading>> getSensorReadings() {
-        return new Representation<List<SensorReading>>(sensorReadingService.getSensorReadings());
     }
 
 
