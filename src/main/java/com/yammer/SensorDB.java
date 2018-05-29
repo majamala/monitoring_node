@@ -12,7 +12,7 @@ public class SensorDB {
     public static List<SensorReading> sensorReadings = new ArrayList<>();
 
 
-    public static List<SensorReading> getSensorReadingsByDate(String sensorName, String startDate, String endDate) throws ParseException {
+    /*public static List<SensorReading> getSensorReadingsByDate(String sensorName, String startDate, String endDate) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         Date dateDate = format.parse(startDate);
@@ -37,7 +37,7 @@ public class SensorDB {
         }
     return sensorReadingList;
     }
-
+*/
     public static void addSensor(SensorInfo sensorInfo) {
     sensors.add(sensorInfo);
     }

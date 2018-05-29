@@ -1,9 +1,8 @@
 package com.yammer;
 
 import com.google.gson.Gson;
-import org.eclipse.jetty.http.HttpStatus;
-import java.text.ParseException;
-import java.util.*;
+import com.google.gson.GsonBuilder;
+
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -35,7 +34,7 @@ public class NodeRestController {
     }
 
 
-    @GET
+   /* @GET
     @Path("/sensorReadings/{sensorName}")
     public Representation <List<SensorReading>> getSensorReadings(@PathParam("sensorName") String sensorName,
                                   @DefaultValue("") @QueryParam("startDate") String startDate,
@@ -51,7 +50,7 @@ public class NodeRestController {
                 return new Representation<List<SensorReading>>(HttpStatus.NOT_FOUND_404, null);
         }
     }
-
+*/
     @POST
     @Path("/sensors")
     public Response getSensors(String body) {
@@ -77,7 +76,7 @@ public class NodeRestController {
     @Path("/sensorReadings/{sensorName}")
     public Response postSensorReading(@PathParam("sensorName") String sensorName, String body) {
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         SensorReading sensorReading = gson.fromJson(body, SensorReading.class);
         sensorReadingService.insert(sensorReading.getId(), sensorReading.getName(), sensorReading.getDate(), sensorReading.getValue(), sensorReading.getUnit());
         return Response.ok(sensorReading).build();
