@@ -25,6 +25,14 @@ public abstract  class SensorReadingsService {
         return sensorReadingDao().getSensorReadings(sensorName);
     }
 
+    public List<SensorReading> getSensorReadingsByStartDate(String sensorName, String startDate) {
+        return sensorReadingDao().getSensorReadingsByStartDate(sensorName, startDate);
+    }
+
+    public List<SensorReading> getSensorReadingsByDate(String sensorName, String startDate, String endDate) {
+        return sensorReadingDao().getSensorReadingsByDate(sensorName, startDate, endDate);
+    }
+
     void insert(int id, String name, String date, int value, String unit) {
         sensorReadingDao().insert(id,name,date,value,unit);
     }

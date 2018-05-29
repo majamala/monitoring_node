@@ -2,6 +2,7 @@ package com.yammer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.eclipse.jetty.http.HttpStatus;
 
 import javax.validation.Validator;
 import javax.ws.rs.*;
@@ -9,6 +10,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.text.ParseException;
+import java.util.List;
 
 
 @Path("/api")
@@ -34,23 +37,29 @@ public class NodeRestController {
     }
 
 
-   /* @GET
+    @GET
     @Path("/sensorReadings/{sensorName}")
     public Representation <List<SensorReading>> getSensorReadings(@PathParam("sensorName") String sensorName,
-                                  @DefaultValue("") @QueryParam("startDate") String startDate,
-                                  @DefaultValue("") @QueryParam("endDate") String endDate) throws ParseException {
+                                                                  @DefaultValue("") @QueryParam("startDate") String startDate,
+                                                                  @DefaultValue("") @QueryParam("endDate") String endDate) throws ParseException {
 
         if (startDate.isEmpty()) {
             return new Representation<List<SensorReading>>(HttpStatus.OK_200, sensorReadingService.getSensorReadings(sensorName));
+        } else if (endDate.isEmpty()) {
+            List<SensorReading> sensorReadings = sensorReadingService.getSensorReadingsByStartDate(sensorName, startDate);
+            if (sensorReadings.size() != 0)
+                return new Representation<List<SensorReading>>(HttpStatus.OK_200, sensorReadings);
+            else
+                return new Representation<List<SensorReading>>(HttpStatus.NOT_FOUND_404, null);
         } else {
-            List<SensorReading> sensorReadings = SensorDB.getSensorReadingsByDate(sensorName, startDate,endDate);
+            List<SensorReading> sensorReadings = sensorReadingService.getSensorReadingsByDate(sensorName, startDate, endDate);
             if (sensorReadings.size() != 0)
                 return new Representation<List<SensorReading>>(HttpStatus.OK_200, sensorReadings);
             else
                 return new Representation<List<SensorReading>>(HttpStatus.NOT_FOUND_404, null);
         }
     }
-*/
+
     @POST
     @Path("/sensors")
     public Response getSensors(String body) {
