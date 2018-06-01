@@ -3,10 +3,11 @@ package com.yammer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.http.HttpStatus;
-
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -29,9 +30,9 @@ public class NodeRestController {
         Config cfg = new Config();
 
         NodeInfo nodeInfo = new NodeInfo(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
-        /*   WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
-         Response response = webTarget.request().post(Entity.json(nodeInfo));
-        */
+        WebTarget webTarget = client.target ("http://10.129.0.137:8080/nodeRegister");
+        Response response = webTarget.request().post(Entity.json(nodeInfo));
+
 
         this.sensorReadingService=sensorReadingsService;
     }
