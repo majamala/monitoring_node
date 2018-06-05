@@ -3,6 +3,8 @@ package com.yammer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.http.HttpStatus;
+import org.fusesource.mqtt.client.*;
+
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -11,7 +13,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.time.Clock;
 import java.util.List;
 
 
@@ -24,15 +28,23 @@ public class NodeRestController {
     private SensorReadingsService sensorReadingService;
 
 
-    public NodeRestController(Validator validator, Client client, SensorReadingsService sensorReadingsService) {
+    public NodeRestController(Validator validator, Client client, SensorReadingsService sensorReadingsService) throws Exception {
         this.validator = validator;
         this.client = client;
         Config cfg = new Config();
+        MQTT mqtt = new MQTT();
+        mqtt.setHost("localhost", 1883);
+
 
         NodeInfo nodeInfo = new NodeInfo(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
-        WebTarget webTarget = client.target ("http://10.129.0.137:8080/nodeRegister");
+        WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
         Response response = webTarget.request().post(Entity.json(nodeInfo));
 
+        FutureConnection connection = mqtt.futureConnection();
+        connection.connect();
+        connection.subscribe(new Topic[]{new Topic("Alarm", QoS.AT_LEAST_ONCE)});
+        Future<Message> receive = connection.receive();
+        connection.publish("Alarm", "Alaaaaaarm!".getBytes(), QoS.AT_LEAST_ONCE, false);
 
         this.sensorReadingService=sensorReadingsService;
     }

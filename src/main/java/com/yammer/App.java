@@ -11,6 +11,7 @@ import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 
@@ -22,7 +23,7 @@ public class App extends Application<NodeConfiguration> {
 
 
     @Override
-    public void run(NodeConfiguration c, Environment e) {
+    public void run(NodeConfiguration c, Environment e) throws Exception {
 
         // Datasource configuration
         final DataSource dataSource =
