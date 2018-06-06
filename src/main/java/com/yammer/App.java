@@ -10,9 +10,13 @@ import javax.ws.rs.client.Client;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 
 public class App extends Application<NodeConfiguration> {
@@ -32,7 +36,7 @@ public class App extends Application<NodeConfiguration> {
 
         LOGGER.info("Registering REST resources");
         final Client client = new JerseyClientBuilder(e).build("NodeRestClient");
-        e.jersey().register(new NodeRestController(e.getValidator(), client, dbi.onDemand(SensorReadingsService.class)));
+        e.jersey().register(new NodeRestController(e.getValidator(), client, dbi.onDemand(SensorReadingsService.class), new RuleEngine()));
 
 
         //Register healthcheck
@@ -47,6 +51,36 @@ public class App extends Application<NodeConfiguration> {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+
+        ClassLoader oldClassLoader = Thread.currentThread().getContextClassLoader();
+        final URL[] localKieConfUrls = new URL[]{
+                ClassLoader.getSystemResource("kie_core.conf"),
+                ClassLoader.getSystemResource("kie_compiler.conf")
+        };
+        ClassLoader newClassLoader = new ClassLoader(oldClassLoader) {
+
+            private final URL[] kieConfUrls = localKieConfUrls;
+
+            @Override
+            public Enumeration<URL> getResources(String name) throws IOException {
+                if ("META-INF/kie.conf".equals(name)) {
+                    return new Enumeration<URL>() {
+                        int index;
+
+                        public boolean hasMoreElements() {
+                            return index < kieConfUrls.length;
+                        }
+
+                        public URL nextElement() {
+                            return kieConfUrls[index++];
+                        }
+                    };
+                }
+                return super.getResources(name);
+            }
+
+        };
+        Thread.currentThread().setContextClassLoader(newClassLoader);
 
         new App().run(args);
 

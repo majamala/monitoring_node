@@ -26,27 +26,22 @@ public class NodeRestController {
     private Validator validator;
     private Client client;
     private SensorReadingsService sensorReadingService;
+    private RuleEngine ruleEngine;
 
 
-    public NodeRestController(Validator validator, Client client, SensorReadingsService sensorReadingsService) throws Exception {
+    public NodeRestController(Validator validator, Client client, SensorReadingsService sensorReadingsService, RuleEngine ruleEngine) throws Exception {
         this.validator = validator;
         this.client = client;
         Config cfg = new Config();
-        MQTT mqtt = new MQTT();
-        mqtt.setHost("localhost", 1883);
 
 
         NodeInfo nodeInfo = new NodeInfo(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
-        WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
-        Response response = webTarget.request().post(Entity.json(nodeInfo));
-
-        FutureConnection connection = mqtt.futureConnection();
-        connection.connect();
-        connection.subscribe(new Topic[]{new Topic("Alarm", QoS.AT_LEAST_ONCE)});
-        Future<Message> receive = connection.receive();
-        connection.publish("Alarm", "Alaaaaaarm!".getBytes(), QoS.AT_LEAST_ONCE, false);
+        //WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
+        //Response response = webTarget.request().post(Entity.json(nodeInfo));
 
         this.sensorReadingService=sensorReadingsService;
+        this.ruleEngine=ruleEngine;
+
     }
 
 
@@ -101,6 +96,7 @@ public class NodeRestController {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         SensorReading sensorReading = gson.fromJson(body, SensorReading.class);
         sensorReadingService.insert(sensorReading.getId(), sensorReading.getName(), sensorReading.getDate(), sensorReading.getValue(), sensorReading.getUnit());
+        this.ruleEngine.ruleTest(sensorReading);
         return Response.ok(sensorReading).build();
     }
 
