@@ -33,8 +33,8 @@ public abstract  class SensorReadingsService {
         return sensorReadingDao().getSensorReadingsByDate(sensorName, startDate, endDate);
     }
 
-    void insert(int id, String name, String date, int value, String unit) {
-        sensorReadingDao().insert(id,name,date,value,unit);
+    void insert(String name, String date, int value, String unit) {
+        sensorReadingDao().insert(name,date,value,unit);
     }
 
     public String performHealthCheck() {

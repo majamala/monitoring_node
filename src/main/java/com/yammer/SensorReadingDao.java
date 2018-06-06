@@ -13,12 +13,12 @@ public interface SensorReadingDao {
     @SqlQuery("select * from sensorreadings where name = :sensorName")
     public List<SensorReading> getSensorReadings(@Bind("sensorName") String sensorName);
 
-    @SqlUpdate("insert into sensorreadings (id, name, date, value, unit) values (:id, :name, :date, :value, :unit)")
-    void insert(@Bind("id") int id, @Bind("name") String name, @Bind("date") String date, @Bind("value") int value, @Bind("unit") String unit);
+    @SqlUpdate("insert into sensorreadings (name, date, value, unit) values (:name, :date, :value, :unit)")
+    void insert(@Bind("name") String name, @Bind("date") String date, @Bind("value") int value, @Bind("unit") String unit);
 
     @SqlQuery("select * from sensorreadings where name = :sensorName and date >= :startDate")
-    public List <SensorReading> getSensorReadingsByStartDate (@Bind("sensorName") String sensorName, @Bind ("startDate") String startDate);
+    public List<SensorReading> getSensorReadingsByStartDate(@Bind("sensorName") String sensorName, @Bind("startDate") String startDate);
 
     @SqlQuery("select * from sensorreadings where name = :sensorName and date between :startDate and :endDate")
-    public List <SensorReading> getSensorReadingsByDate (@Bind("sensorName") String sensorName, @Bind ("startDate") String startDate, @Bind ("endDate") String endDate);
+    public List<SensorReading> getSensorReadingsByDate(@Bind("sensorName") String sensorName, @Bind("startDate") String startDate, @Bind("endDate") String endDate);
 }

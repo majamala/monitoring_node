@@ -3,6 +3,9 @@ package com.yammer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -18,6 +21,8 @@ import java.util.List;
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 public class NodeRestController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     private Validator validator;
     private Client client;
@@ -88,10 +93,9 @@ public class NodeRestController {
     @POST
     @Path("/sensorReadings/{sensorName}")
     public Response postSensorReading(@PathParam("sensorName") String sensorName, String body) {
-
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         SensorReading sensorReading = gson.fromJson(body, SensorReading.class);
-        sensorReadingService.insert(sensorReading.getId(), sensorReading.getName(), sensorReading.getDate(), sensorReading.getValue(), sensorReading.getUnit());
+        sensorReadingService.insert(sensorReading.getName(), sensorReading.getDate(), sensorReading.getValue(), sensorReading.getUnit());
         this.ruleEngine.ruleTest(sensorReading);
         return Response.ok(sensorReading).build();
     }
