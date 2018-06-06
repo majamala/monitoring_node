@@ -14,8 +14,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Properties;
 
 
 @Path("/api")
@@ -35,10 +37,18 @@ public class NodeRestController {
         this.client = client;
         Config cfg = new Config();
 
+        Properties configFile = new java.util.Properties();
+        try {
+            configFile.load(this.getClass().getClassLoader().
+                    getResourceAsStream("managing_node_config.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         NodeInfo nodeInfo = new NodeInfo(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
-        //WebTarget webTarget = client.target ("http://10.19.128.213:8080/nodeRegister");
-        //Response response = webTarget.request().post(Entity.json(nodeInfo));
+        WebTarget webTarget = client.target ("http://"+configFile.getProperty("ip_addr_port")+"/nodeRegister");
+        Response response = webTarget.request().post(Entity.json(nodeInfo));
 
         this.sensorReadingService=sensorReadingsService;
         this.ruleEngine=ruleEngine;
