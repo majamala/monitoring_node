@@ -3,8 +3,6 @@ package com.yammer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.http.HttpStatus;
-import org.fusesource.mqtt.client.*;
-
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -13,9 +11,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.time.Clock;
 import java.util.List;
 
 
@@ -100,79 +96,4 @@ public class NodeRestController {
         return Response.ok(sensorReading).build();
     }
 
-
-/**
-    @GET
-    @Path("/{id}")
-    public Response getSensorById(@PathParam("id") Integer id) {
-        SensorReading sensor = SensorDB.getSensorById(id);
-        if (sensor != null)
-            return Response.ok(sensor).build();
-        else
-            return Response.status(Status.NOT_FOUND).build();
-    }
-
-
-    @GET
-    @Path("/{name}")
-    public Response getSensorByName(@PathParam("name") String name) {
-        SensorReading sensor = SensorDB.getSensorByName(name);
-        if (sensor != null)
-            return Response.ok(sensor).build();
-        else
-            return Response.status(Status.NOT_FOUND).build();
-    }
-
-
-    @POST
-    public Response createSensor(SensorReading sensor) throws URISyntaxException {
-        // validation
-        Set<ConstraintViolation<SensorReading>> violations = validator.validate(sensor);
-        SensorReading e = SensorDB.getSensorById(sensor.getId());
-        if (violations.size() > 0) {
-            ArrayList<String> validationMessages = new ArrayList<String>();
-            for (ConstraintViolation<SensorReading> violation : violations) {
-                validationMessages.add(violation.getPropertyPath().toString() + ": " + violation.getMessage());
-            }
-            return Response.status(Status.BAD_REQUEST).entity(validationMessages).build();
-        }
-        if (e != null) {
-            SensorDB.updateSensor(sensor.getId(), sensor);
-            return Response.created(new URI("/sensorReadings/" + sensor.getId()))
-                    .build();
-        } else
-            return Response.status(Status.NOT_FOUND).build();
-    }
-
-    @PUT
-    @Path("/{id}")
-    public Response updateSensorById(@PathParam("id") Integer id, SensorReading sensor) {
-        // validation
-        Set<ConstraintViolation<SensorReading>> violations = validator.validate(sensor);
-        SensorReading e = SensorDB.getSensorById(sensor.getId());
-        if (violations.size() > 0) {
-            ArrayList<String> validationMessages = new ArrayList<String>();
-            for (ConstraintViolation<SensorReading> violation : violations) {
-                validationMessages.add(violation.getPropertyPath().toString() + ": " + violation.getMessage());
-            }
-            return Response.status(Status.BAD_REQUEST).entity(validationMessages).build();
-        }
-        if (e != null) {
-            sensor.setId(id);
-            SensorDB.updateSensor(id, sensor);
-            return Response.ok(sensor).build();
-        } else
-            return Response.status(Status.NOT_FOUND).build();
-    }
-
-    @DELETE
-    @Path("/{id}")
-    public Response removeSensorById(@PathParam("id") Integer id) {
-        SensorReading sensor = SensorDB.getSensorById(id);
-        if (sensor != null) {
-            SensorDB.removeSensor(id);
-            return Response.ok().build();
-        } else
-            return Response.status(Status.NOT_FOUND).build();
-    }**/
 }
