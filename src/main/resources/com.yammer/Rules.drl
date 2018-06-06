@@ -7,7 +7,7 @@ rule "Too hot"
     when
         $tempReading: SensorReading (name == "sensor_temp" && value >= 25)
     then
-        Publisher.getInstance().publish("Alaaaaarm");
+        Publisher.getInstance().publish("Visoka temperatura ocitana na "+$tempReading.getName()+": "+$tempReading.getValue()+$tempReading.getUnit());
 end
 
 
