@@ -7,14 +7,14 @@ rule "Too hot"
     when
         $tempReading: SensorReading (name == "sensor_temp" && value >= 30)
     then
-        Publisher.getInstance().publish("Attention! High temperature on sensor "+$tempReading.getName()+": "+$tempReading.getValue()+" "+$tempReading.getUnit());
+        Publisher.getInstance().publish($tempReading.getDate()+": Attention! High temperature on sensor "+$tempReading.getName()+": "+$tempReading.getValue()+" "+$tempReading.getUnit());
 end
 
 rule "Too much gas"
     when
         $co2Reading: SensorReading (name == "sensor_co2" && value >= 1000)
     then
-        Publisher.getInstance().publish("Attention! High concentration of CO2 on sensor "+$co2Reading.getName()+": "+$co2Reading.getValue()+" "+$co2Reading.getUnit());
+        Publisher.getInstance().publish($co2Reading.getDate()+": Attention! High concentration of CO2 on sensor "+$co2Reading.getName()+": "+$co2Reading.getValue()+" "+$co2Reading.getUnit());
 end
 
 
