@@ -8,7 +8,7 @@ public class NodeInfo {
     private String name;
     private String location;
     @NotNull
-    private String IPAdress;
+    private String IPAddress;
     private String description;
     private String connectors;
     private String meta;
@@ -18,13 +18,13 @@ public class NodeInfo {
     }
 
     public NodeInfo(String IPAddress) {
-        this.IPAdress = IPAddress;
+        this.IPAddress = IPAddress;
     }
 
-    public NodeInfo(String name, String location, String IPAdress, String description, String connectors, String meta) {
+    public NodeInfo(String name, String location, String IPAddress, String description, String connectors, String meta) {
         this.name=name;
         this.location=location;
-        this.IPAdress = IPAdress;
+        this.IPAddress = IPAddress;
         this.description=description;
         this.connectors=connectors;
         this.meta=meta;
@@ -35,7 +35,7 @@ public class NodeInfo {
         return "NodeInfo{" +
                 "name=" + name +
                 ", location='" + location + '\'' +
-                ", IPAdress='" + IPAdress + '\'' +
+                ", IPAddress='" + IPAddress + '\'' +
                 ", description='" + description + '\'' +
                 ", connectors='" + connectors + '\'' +
                 ", meta='" + meta + '\'' +
@@ -58,12 +58,12 @@ public class NodeInfo {
         this.location = location;
     }
 
-    public String getIPAdress() {
-        return IPAdress;
+    public String getIPAddress() {
+        return IPAddress;
     }
 
-    public void setIPAdress(String IPAdress) {
-        this.IPAdress = IPAdress;
+    public void setIPAddress(String IPAddress) {
+        this.IPAddress = IPAddress;
     }
 
     public String getDescription() {

@@ -42,8 +42,8 @@ public class NodeRestController {
 
 
         NodeInfo nodeInfo = new NodeInfo(cfg.getProperty("name"),cfg.getProperty("location"),App.ip.getHostAddress(), cfg.getProperty("description"), cfg.getProperty("connectors"), cfg.getProperty("meta"));
-        //WebTarget webTarget = client.target ("http://"+configFile.getProperty("ip_addr_port")+"/nodeRegister");
-        //Response response = webTarget.request().post(Entity.json(nodeInfo));
+        WebTarget webTarget = client.target ("http://"+configFile.getProperty("ip_addr_port")+"/nodeRegister");
+        Response response = webTarget.request().post(Entity.json(nodeInfo));
 
         this.sensorReadingService=sensorReadingsService;
         this.ruleEngine=ruleEngine;
