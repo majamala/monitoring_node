@@ -3,9 +3,6 @@ package com.yammer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.http.HttpStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
@@ -23,8 +20,6 @@ import java.util.Properties;
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 public class NodeRestController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     private Validator validator;
     private Client client;

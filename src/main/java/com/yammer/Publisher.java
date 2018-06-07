@@ -12,9 +12,7 @@ import java.util.Properties;
 public class Publisher {
 
     private static Publisher instance;
-
     private FutureConnection connection;
-    private Topic topic;
 
 
     public Publisher() throws URISyntaxException {

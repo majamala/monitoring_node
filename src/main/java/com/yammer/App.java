@@ -21,7 +21,6 @@ public class App extends Application<NodeConfiguration> {
     private static final String SQL = "mysql";
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
     public static InetAddress ip;
-    private static final String NODE_SERVICE = "NodeHealthCheck";
 
 
     @Override
