@@ -81,6 +81,7 @@ public class App extends Application<NodeConfiguration> {
         Thread.currentThread().setContextClassLoader(newClassLoader);
 
         new App().run(args);
+        Receiver.getInstance().receive();
 
 
     }
